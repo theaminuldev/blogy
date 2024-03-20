@@ -2,6 +2,9 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
+const { PurgeCSSPlugin } = require('purgecss-webpack-plugin');
+const glob = require('glob');
 module.exports = {
 	entry: './src/main.jsx',
 	output: {
@@ -32,17 +35,32 @@ module.exports = {
 			directory: path.resolve(__dirname, 'public'),
 		},
 		historyApiFallback: true,
-		port: 3000,
+		port: 8080,
 		open: true,
 	},
 	performance: {
 		hints: false,
 	},
+	optimization: {
+		minimize: true,
+		minimizer: [new TerserPlugin({
+			extractComments: false,
+		})],
+	},
 	plugins: [
-		new CleanWebpackPlugin(),
+		new CleanWebpackPlugin({
+			dry: true,
+			verbose: true,
+			cleanStaleWebpackAssets: false,
+			cleanOnceBeforeBuildPatterns: ['**/*.js', '**/*.css', '!index.html'],
+			cleanAfterEveryBuildPatterns: ['**/*.js', '**/*.css']
+		}),
 		new HtmlWebpackPlugin({
 			template: './index.html',
 			filename: 'index.html',
+		}),
+		new PurgeCSSPlugin({
+			paths: glob.sync(`${path.join(__dirname, 'src')}/**/*`,  { nodir: true }),
 		}),
 	],
 };
