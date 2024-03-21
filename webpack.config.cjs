@@ -35,7 +35,7 @@ module.exports = {
 			directory: path.resolve(__dirname, 'public'),
 		},
 		historyApiFallback: true,
-		port: 8080,
+		// port: 8080,
 		open: true,
 	},
 	performance: {
