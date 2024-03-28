@@ -28,7 +28,7 @@ module.exports = {
 		],
 	},
 	resolve: {
-		extensions: ['.js', '.jsx'],
+		extensions: ['.js', '.jsx', '.json', '.css'],
 	},
 	devServer: {
 		static: {
